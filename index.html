@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="fintech.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Safe Box</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row main text-center">
+            <div class="col-4 welcome text-light">
+                <h3>Welcome To SafeBox!</h3>
+                <p class="mt-5 mb-5">To perform your transactions and access your <br> account info, please log in</p>
+                <button class="btn btn-outline-light col-4 mr-4" onclick="logIn()">Log In</button>
+                
+            </div>
+            <div class="col-6 create bg-light">
+                    <h2 id="head">Create Account</h2>
+                <div>
+                    <div id="show"></div>
+                   <input type="text" name="" id="fullname" class="form-control col-8 ml-5 mt-5" placeholder="What do I call you?" required>
+                   <input type="email" name="" id="email" class="form-control col-8 ml-5 mt-3" placeholder="What's your email?" required>
+                   <input type="password" name="" class="form-control col-8 ml-5  mt-3 mb-4" id="password" placeholder="Password" minlength="6" maxlength="10" required>
+
+                    <button id="direct" class="btn col-4 mr-4 mt-3" onclick="signUp()">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        var Customers = [];
+
+        function signUp(){
+           
+            Customers.length = 0;
+            let name = document.getElementById('fullname').value;
+            let email = document.getElementById('email').value;
+            let password = document.getElementById('password').value;
+
+            let accountNumber =  Math.floor(Math.random() * 9000000000) + 1000000000;
+
+            let customerObj = {name, email, password, accountNumber, accountBalance: 0};
+
+            if(name == "" || email == "" || password ==""){
+                alert('Fill in all details');
+                return;
+            }
+
+            let existingCustomers = JSON.parse(localStorage.getItem('customers'));
+            if(existingCustomers){
+                Customers = existingCustomers;
+            }
+            Customers.push(customerObj);
+            localStorage.setItem('customers', JSON.stringify(Customers));
+            alert('Account successfully created. Please log in to proceed');
+            window.location.assign('index.html');
+        }
+        function logIn(){
+            window.location.assign('login.html');
+        }
+    </script>
+</body>
+</html>

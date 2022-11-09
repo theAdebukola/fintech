@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="fintech.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Safe Box</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row main text-center">
+            <div class="col-4 welcome text-light">
+                <h3>Welcome Back To SafeBox!</h3>
+                <p class="mt-5 mb-5">Log in your credentials to pick <br> up your transactions right where you left off</p>
+                
+            </div>
+            <div class="col-6 create bg-light">
+                    <h2 id="head">Log In</h2>
+                <div>
+                    <div id="show"></div>
+                   <input type="email" name="" id="email" class="form-control col-8 ml-5 mt-3" placeholder="What's your email?" required>
+                   <input type="password" name="" class="form-control col-8 ml-5  mt-3 mb-4" id="password" placeholder="Password" minlength="6" maxlength="10" required>
+
+                    <button id="direct" class="btn col-4 mr-4 mt-3" onclick="getStarted()">Get Started</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+
+        function getStarted(){
+
+            let email = document.getElementById('email').value;
+            let password = document.getElementById('password').value;
+
+            let Customers = JSON.parse(localStorage.getItem('customers'));
+            let check = Customers.findIndex( c => c.email == email && c.password == password);
+ 
+            if(check < 0){
+                alert('Customer does not exist!');
+            }
+            else{
+                localStorage.setItem('currentCustomer', email);
+                window.location.assign('next.html');
+            }
+        }
+    </script>
+</body>
+</html>

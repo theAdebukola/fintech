@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="fintech.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Transaction Page</title>
+</head>
+<body onload = "fetchDetails()">
+    <div class="container-fluid">
+        <div class="row box ">
+            <div class="col-12 bigScreen">
+                <h2 class="mt-4 heading">Welcome, <span id="name"></span></h2>
+                <button class="btn signOut" onclick="signOut()"><i class="fa fa-sign-out"></i></button>
+                <div class="num">
+                    <small>Account Number: </small>
+                    <span id="accNum"></span> <br>
+                    <h2 id="accBal" class="text-center "></h2>
+                </div>
+            </div>
+            
+            <div class="col-6 text-center">
+                <h6 class="mt-4">Transfer</h6><br>
+                <button class="btn" type= "button" data-bs-toggle="offcanvas" data-bs-target="#transferBox"></button><i class="fa fa-exchange"></i></button>
+                <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="transferBox">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Enter Transfer Details</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <span id="accNum"></span>
+                        <input type="number" id="trfaccount" onkeyup="checkAccount()" maxlength="10" placeholder="Enter Destination Account" class=" mt-5 form-control col-6">
+                        <small id="accTrfName"></small>
+                        <input type="number" id="trfamount" placeholder="Enter Amount" class="mt-5 form-control col-6">
+                        <input type="text" id ="trfnarrate" placeholder="Enter Narration" class="mt-5 form-control col-6">
+                        <button class="btn btn-light mt-5 col-4 trans" onclick="continueTransfer()">Transfer</button>
+                    </div>
+                  </div>
+            </div>
+            <div class="col-6 text-center">
+                <h6 class="mt-4">Deposit</h6><br>
+                <button class="btn" type= "button" data-bs-toggle="offcanvas" data-bs-target="#depositBox"><i class="fa fa-money"></i></button>
+                <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="depositBox">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Enter Deposit Details</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                            <span id="accNum"></span>
+                            <input type="number" id="amount" placeholder="Enter Amount You Want To Deposit" class="mt-5 form-control col-6">
+                            <input type="text" id="narrateDeposit" placeholder="Enter Narration" class="mt-5 form-control col-6">
+                            <button class="btn btn-light mt-5 col-4 trans" onclick="deposit()"> Deposit</button>
+                        </div>
+                  </div>
+            </div>
+            <div class="col-6 with text-center">
+                <h6 class="mt-4">Withdraw</h6><br>
+                <button class="btn" type= "button" data-bs-toggle="offcanvas" data-bs-target="#withdrawalBox"><i class="fa fa-credit-card-alt"></i></button>
+                <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="withdrawalBox">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Enter withdrawal Details</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                            <span id="accNum"></span>
+                            <input type="number" id="withamount" placeholder="Enter Amount You Want To Withdraw" class="mt-5 form-control col-6">
+                            <button class="btn btn-light mt-5 col-4 trans" onclick="withdrawMoney()"> Withdraw</button>
+                        </div>
+                  </div>
+            </div>
+            <div class="col-6 hist text-center">
+                <h6 class="mt-4">Transaction History</h6><br>
+                <button class="btn" type= "button" data-bs-toggle="offcanvas" data-bs-target="#historyBox"><i class="fa fa-money"></i></button>
+                <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="historyBox">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Transaction History</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body" id="body">
+                            
+                        </div>
+                  </div>
+            </div>
+           
+        </div>
+    </div>
+
+    <script>
+        function fetchDetails(){
+            let currentCustomer = localStorage.getItem('currentCustomer');
+            if(currentCustomer){
+                let Customers = JSON.parse(localStorage.getItem('customers'));
+                let details = Customers.filter (c => c.email == currentCustomer);
+
+                document.getElementById('name').innerHTML = details[0].name;
+                document.getElementById('accNum').innerHTML = details[0].accountNumber;
+                document.getElementById('accBal').innerHTML = details[0].accountBalance;
+            }
+            else{
+                window.location.assign('login.html');
+                alert('Please create an account to access the transaction page.');
+            }
+    }
+
+    function signOut(){
+        localStorage.removeItem('currentCustomer');
+        window.location.assign('login.html');
+    }
+
+    function deposit(){
+        
+        let currentCustomer = localStorage.getItem('currentCustomer');
+        let amount = document.getElementById('amount').value;
+        
+            if(currentCustomer){
+                let Customers = JSON.parse(localStorage.getItem('customers'));
+                let index = Customers.findIndex (c => c.email == currentCustomer);
+                
+                //let accountBalance = Customers[index].accountBalance;
+
+                if(confirm('Are you sure you want to make this deposit?')){
+                    Customers[index].accountBalance = parseFloat(Customers[index].accountBalance) + parseFloat(amount);
+                    localStorage.setItem('customers', JSON. stringify(Customers));
+                    fetchDetails();
+
+                    alert('Deposit Successful');
+                    show();
+            }
+        }
+                
+    }
+
+    function withdrawMoney(){
+        let currentCustomer = localStorage.getItem('currentCustomer');
+        let withamount = document.getElementById('withamount').value;
+        
+            if(currentCustomer){
+                let Customers = JSON.parse(localStorage.getItem('customers'));
+                let index = Customers.findIndex (c => c.email == currentCustomer);
+                let accountBalance = Customers[index].accountBalance;
+
+                if(confirm('Are you sure you want to make this withdrawal?')){
+                    if (accountBalance >= withamount){
+                        Customers[index].accountBalance = parseFloat(Customers[index].accountBalance) - parseFloat(withamount);
+                        localStorage.setItem('customers', JSON. stringify(Customers));
+                  
+                    fetchDetails();
+                    alert('Withdrawal Successful');
+                    show();
+                }
+                else{
+                    alert('Insufficient Funds');
+                }
+            }
+        }
+                
+    }
+
+    function checkAccount(){
+        let trfaccount = document.getElementById('trfaccount').value;
+        if(trfaccount.length == 10){
+            let Customers = JSON.parse(localStorage.getItem('customers'));
+            let index = Customers.findIndex(c => c.accountNumber == trfaccount);
+            if(index < 0){
+                document.getElementById('accTrfName').innerHTML = 'Invalid';
+            }
+            else{
+                document.getElementById('accTrfName').innerHTML = Customers[index].name;
+            }
+        }
+    }
+
+    function continueTransfer(){
+        let trfamount = document.getElementById('trfamount').value; 
+        let trfaccount = document.getElementById('trfaccount').value; 
+
+        let currentCustomer = localStorage.getItem('currentCustomer');
+        if(currentCustomer){
+            let Customers = JSON.parse(localStorage.getItem('customers'));
+            let index = Customers.findIndex(c => c.email = currentCustomer);
+            let accountBalance = Customers[index].accountBalance;
+            let myAccount = Customers[index].accountNumber;
+            if(myAccount == trfaccount){
+                alert('You cannot transfer to yourself');
+                return;
+            }
+            if(accountBalance >= trfamount){
+                let trfIndex = Customers.findIndex(c=> c.accountNumber == trfaccount);
+                if(trfIndex < 0){
+                    alert('Invalid Account Number');
+                }
+                else{
+                    Customers[trfIndex].accountBalance = parseFloat(Customers[trfIndex].accountBalance) + parseFloat(trfamount);
+                    Customers[index].accountBalance = parseFloat(Customers[index].accountBalance) - parseFloat(trfamount);
+                    localStorage.setItem('customers', JSON.stringify(Customers));
+
+                    fetchDetails();
+                    alert('Transfer Successful');
+                    show();
+                }
+            }
+            else{
+                alert('Insufficient Funds');
+            }
+        }
+    }
+
+    function show(){
+       
+        body.innerHTML = "";
+        let date = new Date();
+        let month = [1,2,3,4,5,6,7,8,9,10,11,12];
+        let dateReg = `${date.getDate()}/ ${month[date.getMonth()]}/${date.getFullYear()}  at   ${date.getHours()}:${date.getMinutes()}`;
+        let detail = document.getElementById('narrateDeposit').value;
+        let amount = document.getElementById('amount').value;
+        let withamount = document.getElementById('withamount').value;
+        let trfamount = document.getElementById('trfamount').value; 
+        let trfaccount = document.getElementById('trfaccount').value; 
+        let trfnarrate = document.getElementById('trfnarrate').value;
+
+        let currentCustomer = localStorage.getItem('currentCustomer');
+        if(currentCustomer){
+            let Customers = JSON.parse(localStorage.getItem('customers'));
+            let index = Customers.findIndex(c => c.email = currentCustomer);
+        
+            body.innerHTML += `DEPOSIT: ${amount}  ${dateReg} \n NARRATION: ${detail} \n WITHDRWAL: ${withamount}  ${dateReg}
+            \n TRANSFER: ${trfamount} to ${trfaccount} ${dateReg}`;  
+           localStorage.setItem('customers', JSON. stringify(Customers));        
+        }   
+    }
+    
+       
+  
+    
+
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+</body>
+</html>

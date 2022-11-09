@@ -1,0 +1,87 @@
+body{
+    background-image:linear-gradient(rgb(0,0,0,0.6),rgb(0,0,0,0.6)),url('./images/abstract1.jpg');
+    width: 99%;
+    height: 90vh;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    font-family: 'Indie Flower', 'Comic Sans', cursive;
+        
+    .main{
+        margin-left: 20%;
+        margin-top: 5%;
+        height: 80vh;
+        width: 60%;
+        justify-content: center;
+        .welcome{
+            background-color:rgb(141, 25, 141);
+            border-radius: 20px 0px 0px 20px;
+        h3{
+            margin-top: 40%;
+        }
+    }
+        .create{
+            border-radius: 0px 20px 20px 0px;
+            color: rgb(141, 25, 141);
+            h2{
+                margin-top: 25%;
+             }
+        button{
+            background-color:rgb(141, 25, 141);
+            color: white;
+        } 
+    }
+        
+    }
+    
+}
+.box{
+    background-image:linear-gradient(rgb(0,0,0,0.9),rgb(0,0,0,0.9)),url('./images/abstract2.jpg');
+    color: rgb(141, 25, 141);
+    margin-left: 25%;
+    margin-top: 5%;
+    height: 80vh;
+    width: 50%;
+    justify-content: center;
+    border-radius: 20px;
+    div{
+        box-shadow: 0px 0px 4px grey;
+    }
+    .bigScreen{
+        border-radius: 20px 20px 0px 0px;
+            .signOut{
+                margin-left: 90%;
+                margin-top: -10%;
+            }
+            .num{
+                border-radius: 5px;
+                background-color: rgba(141, 25, 141, 0.3);
+                height: 55%;
+                color: rgb(185, 34, 185);
+                padding: 5% 0;
+            #accNum{
+                font-size: larger;
+            }
+        }
+    }  
+    .with{
+        border-radius: 0px 0px 0px 20px;
+    } 
+    .hist{
+        border-radius: 0px 0px 20px 0px;
+    } 
+    i{
+        color:rgb(141, 25, 141);
+        font-size: 30px;
+    }
+    input{
+        border-bottom: 2px solid grey;
+        background-color: rgba(141, 25, 141, 0.7);
+        color: white;
+    }
+    .trans{
+        background-color:rgb(141, 25, 141);
+        color: white;
+    }
+    
+}
